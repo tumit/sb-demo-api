@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+filesToFormat="$(git --no-pager diff --name-status --no-color --cached | awk '$1 != "D" { print $NF}')"
+
+echo "files to format $filesToFormat"
+for sourceFilePath in $filesToFormat
+do
+  ./gradlew --daemon spotlessApply -PspotlessIdeHook="$(pwd)/$sourceFilePath"
+  git add $sourceFilePath
+done;
