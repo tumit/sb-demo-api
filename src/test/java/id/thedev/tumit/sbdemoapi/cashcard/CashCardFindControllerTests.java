@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CashCardControllerTests {
+public class CashCardFindControllerTests {
 
     @Autowired
     TestRestTemplate restTemplate;
@@ -42,4 +42,6 @@ public class CashCardControllerTests {
         assertThat(res.getStatusCode()).isEqualTo(NOT_FOUND);
         assertThat(res.getBody()).isBlank();
     }
+
+    // TODO: case 401 Unauthorized
 }

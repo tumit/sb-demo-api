@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/cashcards")
-public class CashCardController {
+public class CashCardFindController {
 
     private final CashCardRepository cashCardRepository;
 

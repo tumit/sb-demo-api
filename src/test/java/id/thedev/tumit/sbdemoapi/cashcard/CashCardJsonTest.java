@@ -17,12 +17,11 @@ public class CashCardJsonTest {
     @Test
     void cashCardSerializationTest() throws IOException {
         var cashCard = new CashCard(99L, 123.45);
-        assertThat(json.write(cashCard)).isStrictlyEqualToJson("expected.json");
-        assertThat(json.write(cashCard)).hasJsonPathNumberValue("@.id");
-        assertThat(json.write(cashCard)).extractingJsonPathNumberValue("@.id").isEqualTo(99);
-        assertThat(json.write(cashCard)).hasJsonPathNumberValue("@.amount");
-        assertThat(json.write(cashCard))
-                .extractingJsonPathNumberValue("@.amount")
-                .isEqualTo(123.45);
+        var content = json.write(cashCard);
+        assertThat(content).isStrictlyEqualToJson("expected.json");
+        assertThat(content).hasJsonPathNumberValue("@.id");
+        assertThat(content).extractingJsonPathNumberValue("@.id").isEqualTo(99);
+        assertThat(content).hasJsonPathNumberValue("@.amount");
+        assertThat(content).extractingJsonPathNumberValue("@.amount").isEqualTo(123.45);
     }
 }
