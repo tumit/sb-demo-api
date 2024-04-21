@@ -8,14 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class CashCardCreateControllerTests {
 
     @Autowired
     TestRestTemplate restTemplate;
 
     @Test
+    @DirtiesContext
     void shouldCreateANewCashCard() {
         var newCashCard = new CashCard(null, 250.00);
         var createResponse = restTemplate.postForEntity("/cashcards", newCashCard, Void.class);
