@@ -1,5 +1,7 @@
 package id.thedev.tumit.sbdemoapi.cashcard;
 
+import java.security.Principal;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -20,20 +22,19 @@ public class CashCardFindController {
     private final CashCardRepository cashCardRepository;
 
     @GetMapping("/{requestedId}")
-    private ResponseEntity<CashCard> findById(@PathVariable Long requestedId) {
-        return cashCardRepository
-                .findById(requestedId)
+    private ResponseEntity<CashCard> findById(@PathVariable Long requestedId, Principal principal) {
+        return Optional.ofNullable(cashCardRepository.findByIdAndOwner(requestedId, principal.getName()))
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping()
-    private ResponseEntity<Iterable<CashCard>> findAll(Pageable pageable) {
+    private ResponseEntity<Iterable<CashCard>> findAll(Pageable pageable, Principal principal) {
         var pageRequest = PageRequest.of(
                 pageable.getPageNumber(),
                 pageable.getPageSize(),
                 pageable.getSortOr(Sort.by(Sort.Direction.ASC, "amount")));
-        var page = cashCardRepository.findAll(pageRequest);
+        var page = cashCardRepository.findByOwner(principal.getName(), pageRequest);
         return ResponseEntity.ok(page.getContent());
     }
 }
