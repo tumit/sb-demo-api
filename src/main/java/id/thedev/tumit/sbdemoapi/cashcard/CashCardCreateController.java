@@ -22,4 +22,40 @@ public class CashCardCreateController {
                 ucb.path("/cashcards/{id}").buildAndExpand(savedCashCard.id()).toUri();
         return ResponseEntity.created(location).build();
     }
+
+    @PutMapping("/{requestedId}")
+    private ResponseEntity<Void> updateCashCard(
+            @PathVariable Long requestedId, @RequestBody CashCard updateCashCard, Principal principal) {
+
+        var cardCashOpt = cashCardRepository.findByIdAndOwner(requestedId, principal.getName());
+
+        if (cardCashOpt.isPresent()) {
+            var updatedCashCard = new CashCard(cardCashOpt.get().id(), updateCashCard.amount(), principal.getName());
+            cashCardRepository.save(updatedCashCard);
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.notFound().build();
+
+        //                return cashCardRepository.findByIdAndOwner(requestedId, principal.getName()).map(cashCard -> {
+        //                    return ResponseEntity.noContent().build();
+        //                }).orElseGet(() -> ResponseEntity.notFound().build());
+
+        //        return cashCardRepository
+        //                .findByIdAndOwner(requestedId, principal.getName())
+        //                .map(cashCard -> {
+        //                    var updatedCashCard = new CashCard(cashCard.id(), updateCashCard.amount(),
+        // principal.getName());
+        //                    cashCardRepository.save(updatedCashCard);
+        //                    return ResponseEntity.noContent().build();
+        //                })
+        //                .orElse(ResponseEntity.notFound().build());
+        //        var cardCashOpt = cashCardRepository.findByIdAndOwner(requestedId, principal.getName());
+        //
+        //        return cardCashOpt.map(cardCash -> {
+        //            var updatedCashCard = new CashCard(cardCash.id(), updateCashCard.amount(), principal.getName());
+        //            cashCardRepository.save(updatedCashCard);
+        //            return ResponseEntity.noContent().build();
+        //        }).orElse(ResponseEntity.notFound().build());
+    }
 }
