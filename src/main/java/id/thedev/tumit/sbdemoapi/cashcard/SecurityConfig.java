@@ -22,6 +22,8 @@ public class SecurityConfig {
         //                .csrf(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(r -> r.requestMatchers("/cashcards/**").hasRole("CARD-OWNER"))
+                .authorizeHttpRequests(
+                        r -> r.requestMatchers("/api/recaptcha/**").permitAll())
                 .httpBasic(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable);
 
